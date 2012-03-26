@@ -35,7 +35,6 @@ public class Main
     {
         Set<Coordinate> list = new HashSet<Coordinate>();
         int n = getRandomNumberOfCoordinates();
-        System.err.println( "Will get " + n + " random coords" );
         for ( int i = 0; i < n; i++ )
         {
             list.add( getRandomCoordinate() );

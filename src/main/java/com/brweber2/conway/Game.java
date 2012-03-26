@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class Game
 {
-    private Map<Coordinate, Cell> currentLivingCells;
-    private Map<Coordinate, Cell> nextRoundOfLivingCells = new HashMap<Coordinate, Cell>();
+    private Map<Coordinate, CellState> currentLivingCells;
+    private Map<Coordinate, CellState> nextRoundOfLivingCells = new HashMap<Coordinate, CellState>();
     private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
     private Boundaries lastBoundaries = null;
 
@@ -21,7 +21,7 @@ public class Game
         // initialize our game state
         for ( Coordinate currentLivingCell : currentLivingCells )
         {
-            nextRoundOfLivingCells.put( currentLivingCell, new Cell( CellState.ALIVE ) );
+            nextRoundOfLivingCells.put( currentLivingCell, CellState.ALIVE );
         }
     }
     
@@ -33,7 +33,7 @@ public class Game
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        currentLivingCells = new HashMap<Coordinate, Cell>( nextRoundOfLivingCells );
+        currentLivingCells = new HashMap<Coordinate, CellState>( nextRoundOfLivingCells );
         nextRoundOfLivingCells.clear();
         for ( Coordinate coordinate : currentLivingCells.keySet() )
         {
@@ -41,18 +41,18 @@ public class Game
         }
     }
 
-    public void handle( Coordinate coordinate, Cell cell )
+    public void handle( Coordinate coordinate, CellState cell )
     {
-        Map<Cell, Coordinate> neighboringCells = getNeighboringCells( coordinate );
+        Map<CellState, Coordinate> neighboringCells = getNeighboringCells( coordinate );
         CellState nextState = cell.getNextState( neighboringCells.keySet() );
         if ( nextState.alive() )
         {
-            nextRoundOfLivingCells.put( coordinate, new Cell( nextState ) );
+            nextRoundOfLivingCells.put( coordinate, nextState );
         }
-        if ( cell.getCellState().alive() )
+        if ( cell.alive() )
         {
             // we have have to raise some of our dead neighbor cells...
-            for ( Cell neighboringCell : getDeadNeighbors( neighboringCells.keySet() ) )
+            for ( CellState neighboringCell : getDeadNeighbors( neighboringCells.keySet() ) )
             {
                 Coordinate neighborCoordinate = neighboringCells.get( neighboringCell );
                 if ( !visitedNeighborCoordinates.contains( neighborCoordinate ) )
@@ -64,12 +64,12 @@ public class Game
         }
     }
 
-    private Map<Cell, Coordinate> getNeighboringCells( Coordinate coordinate )
+    private Map<CellState, Coordinate> getNeighboringCells( Coordinate coordinate )
     {
         int x = coordinate.getX();
         int y = coordinate.getY();
 
-        Map<Cell,Coordinate> result = new HashMap<Cell, Coordinate>();
+        Map<CellState,Coordinate> result = new HashMap<CellState, Coordinate>();
         addToResult( result, new Coordinate( x - 1, y - 1 ) );
         addToResult( result, new Coordinate( x - 1, y     ) );
         addToResult( result, new Coordinate( x - 1, y + 1 ) );
@@ -82,7 +82,7 @@ public class Game
         return result;
     }
 
-    private void addToResult( Map<Cell,Coordinate> result, Coordinate next )
+    private void addToResult( Map<CellState,Coordinate> result, Coordinate next )
     {
         if ( currentLivingCells.containsKey( next ) )
         {
@@ -90,16 +90,16 @@ public class Game
         }
         else
         {
-            result.put( new Cell( CellState.DEAD ), next );
+            result.put( CellState.DEAD, next );
         }
     }
     
-    private Set<Cell> getDeadNeighbors( Set<Cell> neighbors )
+    private Set<CellState> getDeadNeighbors( Set<CellState> neighbors )
     {
-        Set<Cell> list = new HashSet<Cell>();
-        for ( Cell neighbor : neighbors )
+        Set<CellState> list = new HashSet<CellState>();
+        for ( CellState neighbor : neighbors )
         {
-            if ( ! neighbor.getCellState().alive() )
+            if ( ! neighbor.alive() )
             {
                 list.add( neighbor );
             }

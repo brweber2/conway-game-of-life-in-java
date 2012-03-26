@@ -10,7 +10,7 @@ public class Boundaries
     int minX, maxX, minY, maxY;
 
 
-    public Boundaries( Map<Coordinate, Cell> livingCells, Boundaries lastBoundaries )
+    public Boundaries( Map<Coordinate, CellState> livingCells, Boundaries lastBoundaries )
     {
         boolean first = true;
         for ( Coordinate coordinate : livingCells.keySet() )
