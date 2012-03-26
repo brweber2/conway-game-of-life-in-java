@@ -43,7 +43,7 @@ public class Game
     public void handle( Coordinate coordinate, Cell cell )
     {
         Map<Coordinate,Cell> neighboringCells = getNeighboringCells( coordinate );
-        Cell next = cell.getNextCell( neighboringCells );
+        Cell next = new CellTransition( cell ).getNextCell( neighboringCells );
         if ( next.alive() )
         {
             nextBoard.put( coordinate, next );

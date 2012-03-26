@@ -3,10 +3,6 @@
  */
 package com.brweber2.conway;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public enum Cell
 {
     ALIVE(true),
@@ -23,49 +19,6 @@ public enum Cell
     public boolean alive()
     {
         return alive;
-    }
-
-    public Cell getNextCell( Map<Coordinate, Cell> neighbors )
-    {
-        int numberOfLiveNeighbors = getLiveNeighbors( neighbors ).size();
-        if ( alive() )
-        {
-
-            if ( numberOfLiveNeighbors < 2 )
-            {
-                return Cell.DEAD;
-            }
-            else if ( numberOfLiveNeighbors == 2 || numberOfLiveNeighbors == 3 )
-            {
-                return Cell.ALIVE;
-            }
-            else
-            {
-                return Cell.DEAD;
-            }
-        }
-        else
-        {
-            if ( numberOfLiveNeighbors == 3 )
-            {
-                return Cell.RESURRECTED;
-            }
-            return Cell.DEAD;
-        }
-    }
-
-    private Set<Coordinate> getLiveNeighbors( Map<Coordinate,Cell> neighbors )
-    {
-        Set<Coordinate> list = new HashSet<Coordinate>();
-        for ( Coordinate coordinate : neighbors.keySet() )
-        {
-            Cell neighbor = neighbors.get( coordinate );
-            if ( neighbor.alive() )
-            {
-                list.add( coordinate );
-            }
-        }
-        return list;
     }
 
     @Override
