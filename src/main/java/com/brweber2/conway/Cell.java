@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public enum CellState
+public enum Cell
 {
     ALIVE(true),
     RESURRECTED(true),
@@ -15,7 +15,7 @@ public enum CellState
 
     private final boolean alive;
 
-    private CellState( boolean alive )
+    private Cell( boolean alive )
     {
         this.alive = alive;
     }
@@ -25,7 +25,7 @@ public enum CellState
         return alive;
     }
 
-    public CellState getNextState( Map<Coordinate,CellState> neighbors )
+    public Cell getNextState( Map<Coordinate,Cell> neighbors )
     {
         int numberOfLiveNeighbors = getLiveNeighbors( neighbors ).size();
         if ( alive() )
@@ -33,33 +33,33 @@ public enum CellState
 
             if ( numberOfLiveNeighbors < 2 )
             {
-                return CellState.DEAD;
+                return Cell.DEAD;
             }
             else if ( numberOfLiveNeighbors == 2 || numberOfLiveNeighbors == 3 )
             {
-                return CellState.ALIVE;
+                return Cell.ALIVE;
             }
             else
             {
-                return CellState.DEAD;
+                return Cell.DEAD;
             }
         }
         else
         {
             if ( numberOfLiveNeighbors == 3 )
             {
-                return CellState.RESURRECTED;
+                return Cell.RESURRECTED;
             }
-            return CellState.DEAD;
+            return Cell.DEAD;
         }
     }
 
-    public Set<Coordinate> getLiveNeighbors( Map<Coordinate,CellState> neighbors )
+    public Set<Coordinate> getLiveNeighbors( Map<Coordinate,Cell> neighbors )
     {
         Set<Coordinate> list = new HashSet<Coordinate>();
         for ( Coordinate coordinate : neighbors.keySet() )
         {
-            CellState neighbor = neighbors.get( coordinate );
+            Cell neighbor = neighbors.get( coordinate );
             if ( neighbor.alive() )
             {
                 list.add( coordinate );
@@ -71,7 +71,7 @@ public enum CellState
     @Override
     public String toString()
     {
-        return "CellState." + this.name() + "{" +
+        return "Cell." + this.name() + "{" +
                 "alive=" + alive +
                 '}';
     }

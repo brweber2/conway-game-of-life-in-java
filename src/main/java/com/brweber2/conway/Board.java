@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class Board
 {
-    private Map<Coordinate, CellState> livingCells = new HashMap<Coordinate, CellState>();
+    private Map<Coordinate, Cell> livingCells = new HashMap<Coordinate, Cell>();
     private Boundaries lastBoundaries;
 
-    public Board( Map<Coordinate, CellState> livingCells, Boundaries lastBoundaries )
+    public Board( Map<Coordinate, Cell> livingCells, Boundaries lastBoundaries )
     {
         this.livingCells = livingCells;
         this.lastBoundaries = lastBoundaries;

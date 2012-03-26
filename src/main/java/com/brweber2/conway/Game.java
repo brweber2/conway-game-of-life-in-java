@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class Game
 {
-    private Map<Coordinate, CellState> currentLivingCells;
-    private Map<Coordinate, CellState> nextRoundOfLivingCells = new HashMap<Coordinate, CellState>();
+    private Map<Coordinate, Cell> currentLivingCells;
+    private Map<Coordinate, Cell> nextRoundOfLivingCells = new HashMap<Coordinate, Cell>();
     private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
     private Boundaries lastBoundaries = null;
 
@@ -21,7 +21,7 @@ public class Game
         // initialize our game state
         for ( Coordinate currentLivingCell : currentLivingCells )
         {
-            nextRoundOfLivingCells.put( currentLivingCell, CellState.ALIVE );
+            nextRoundOfLivingCells.put( currentLivingCell, Cell.ALIVE );
         }
     }
     
@@ -33,7 +33,7 @@ public class Game
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        currentLivingCells = new HashMap<Coordinate, CellState>( nextRoundOfLivingCells );
+        currentLivingCells = new HashMap<Coordinate, Cell>( nextRoundOfLivingCells );
         nextRoundOfLivingCells.clear();
         for ( Coordinate coordinate : currentLivingCells.keySet() )
         {
@@ -41,20 +41,20 @@ public class Game
         }
     }
 
-    public void handle( Coordinate coordinate, CellState cell )
+    public void handle( Coordinate coordinate, Cell cell )
     {
-        Map<Coordinate,CellState> neighboringCells = getNeighboringCells( coordinate );
-        CellState nextState = cell.getNextState( neighboringCells );
-        if ( nextState.alive() )
+        Map<Coordinate,Cell> neighboringCells = getNeighboringCells( coordinate );
+        Cell next = cell.getNextState( neighboringCells );
+        if ( next.alive() )
         {
-            nextRoundOfLivingCells.put( coordinate, nextState );
+            nextRoundOfLivingCells.put( coordinate, next );
         }
         if ( cell.alive() )
         {
             // we have have to raise some of our dead neighbor cells...
             for ( Coordinate neighborCoordinate : getDeadNeighbors( neighboringCells ) )
             {
-                CellState neighboringCell = neighboringCells.get( neighborCoordinate );
+                Cell neighboringCell = neighboringCells.get( neighborCoordinate );
                 if ( !visitedNeighborCoordinates.contains( neighborCoordinate ) )
                 {
                     visitedNeighborCoordinates.add( neighborCoordinate );
@@ -64,12 +64,12 @@ public class Game
         }
     }
 
-    private Map<Coordinate,CellState> getNeighboringCells( Coordinate coordinate )
+    private Map<Coordinate,Cell> getNeighboringCells( Coordinate coordinate )
     {
         int x = coordinate.getX();
         int y = coordinate.getY();
 
-        Map<Coordinate,CellState> result = new HashMap<Coordinate,CellState>();
+        Map<Coordinate,Cell> result = new HashMap<Coordinate,Cell>();
         addToResult( result, new Coordinate( x - 1, y - 1 ) );
         addToResult( result, new Coordinate( x - 1, y     ) );
         addToResult( result, new Coordinate( x - 1, y + 1 ) );
@@ -82,7 +82,7 @@ public class Game
         return result;
     }
 
-    private void addToResult( Map<Coordinate,CellState> result, Coordinate next )
+    private void addToResult( Map<Coordinate,Cell> result, Coordinate next )
     {
         if ( currentLivingCells.containsKey( next ) )
         {
@@ -90,16 +90,16 @@ public class Game
         }
         else
         {
-            result.put( next, CellState.DEAD );
+            result.put( next, Cell.DEAD );
         }
     }
     
-    private Set<Coordinate> getDeadNeighbors( Map<Coordinate,CellState> neighbors )
+    private Set<Coordinate> getDeadNeighbors( Map<Coordinate,Cell> neighbors )
     {
         Set<Coordinate> list = new HashSet<Coordinate>();
         for ( Coordinate coordinate : neighbors.keySet() )
         {
-            CellState neighbor = neighbors.get( coordinate );
+            Cell neighbor = neighbors.get( coordinate );
             if ( ! neighbor.alive() )
             {
                 list.add( coordinate );
