@@ -54,7 +54,7 @@ public enum Cell
         }
     }
 
-    public Set<Coordinate> getLiveNeighbors( Map<Coordinate,Cell> neighbors )
+    private Set<Coordinate> getLiveNeighbors( Map<Coordinate,Cell> neighbors )
     {
         Set<Coordinate> list = new HashSet<Coordinate>();
         for ( Coordinate coordinate : neighbors.keySet() )

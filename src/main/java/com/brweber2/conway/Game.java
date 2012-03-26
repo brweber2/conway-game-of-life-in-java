@@ -11,33 +11,32 @@ import java.util.Set;
 
 public class Game
 {
-    private Map<Coordinate, Cell> currentLivingCells;
-    private Map<Coordinate, Cell> nextRoundOfLivingCells = new HashMap<Coordinate, Cell>();
+    private Board previousBoard;
+    private Board nextBoard = new Board();
     private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
-    private Boundaries lastBoundaries = null;
 
-    public Game( Collection<Coordinate> currentLivingCells )
+    public Game( Collection<Coordinate> initialBoard )
     {
         // initialize our game state
-        for ( Coordinate currentLivingCell : currentLivingCells )
+        for ( Coordinate coordinate : initialBoard )
         {
-            nextRoundOfLivingCells.put( currentLivingCell, Cell.ALIVE );
+            nextBoard.put( coordinate, Cell.ALIVE );
         }
     }
     
-    public Board getBoard()
+    public BoardPrinter getBoard()
     {
-        return new Board( nextRoundOfLivingCells, lastBoundaries );
+        return new BoardPrinter( nextBoard );
     }
 
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        currentLivingCells = new HashMap<Coordinate, Cell>( nextRoundOfLivingCells );
-        nextRoundOfLivingCells.clear();
-        for ( Coordinate coordinate : currentLivingCells.keySet() )
+        previousBoard = new Board( nextBoard.getLivingCells() );
+        nextBoard = new Board( previousBoard );
+        for ( Coordinate coordinate : previousBoard.getCoordinates() )
         {
-            handle( coordinate, currentLivingCells.get( coordinate ) );
+            handle( coordinate, previousBoard.get( coordinate ) );
         }
     }
 
@@ -47,7 +46,7 @@ public class Game
         Cell next = cell.getNextCell( neighboringCells );
         if ( next.alive() )
         {
-            nextRoundOfLivingCells.put( coordinate, next );
+            nextBoard.put( coordinate, next );
         }
         if ( cell.alive() )
         {
@@ -84,9 +83,9 @@ public class Game
 
     private void addToResult( Map<Coordinate,Cell> result, Coordinate next )
     {
-        if ( currentLivingCells.containsKey( next ) )
+        if ( previousBoard.hasCoordinate( next ) )
         {
-            result.put( next, currentLivingCells.get( next ) );
+            result.put( next, previousBoard.get( next ) );
         }
         else
         {
@@ -111,11 +110,11 @@ public class Game
 
     public boolean over()
     {
-        return nextRoundOfLivingCells.keySet().isEmpty();
+        return nextBoard.isEmpty();
     }
 
     public void printBoard()
     {
-        lastBoundaries = getBoard().print();
+        getBoard().print();
     }
 }

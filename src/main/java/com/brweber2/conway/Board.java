@@ -3,40 +3,70 @@
  */
 package com.brweber2.conway;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Board
 {
-    private Map<Coordinate, Cell> livingCells = new HashMap<Coordinate, Cell>();
-    private Boundaries lastBoundaries;
+    private Map<Coordinate, Cell> livingCells;
+    private Board previousBoard = null;
 
-    public Board( Map<Coordinate, Cell> livingCells, Boundaries lastBoundaries )
+    public Board()
     {
-        this.livingCells = livingCells;
-        this.lastBoundaries = lastBoundaries;
+        this.livingCells = new HashMap<Coordinate, Cell>();
     }
 
-    public Boundaries print()
+    public Board( Board board )
     {
-        Boundaries boundaries = new Boundaries( livingCells, lastBoundaries );
-        for ( int y = boundaries.getMinY(); y <= boundaries.getMaxY(); y++ )
+        this();
+        this.previousBoard = board;
+    }
+
+    public Board( Map<Coordinate, Cell> livingCells )
+    {
+        this.livingCells = livingCells;
+    }
+
+    public boolean hasCoordinate( Coordinate coordinate )
+    {
+        return livingCells.containsKey( coordinate );
+    }
+
+    public Collection<Coordinate> getCoordinates()
+    {
+        return livingCells.keySet();
+    }
+
+    public Cell get( Coordinate coordinate )
+    {
+        return livingCells.get( coordinate );
+    }
+
+    public boolean isEmpty()
+    {
+        return livingCells.isEmpty();
+    }
+
+    public void put( Coordinate coordinate, Cell cell )
+    {
+        livingCells.put( coordinate, cell );
+    }
+
+    public Boundaries getBoundaries()
+    {
+        if ( previousBoard != null )
         {
-            for ( int x = boundaries.getMinX(); x <= boundaries.getMaxX(); x++ )
-            {
-                Coordinate coordinate = new Coordinate( x, y );
-                if ( livingCells.containsKey( coordinate ) )
-                {
-                    System.err.print( "*" );
-                }
-                else
-                {
-                    System.err.print( "." );
-                }
-            }
-            System.err.println();
+            return new Boundaries( previousBoard.getBoundaries(), getCoordinates() );
         }
-        System.err.println();
-        return boundaries;
+        else
+        {
+            return new Boundaries( getCoordinates() );
+        }
+    }
+
+    public Map<Coordinate, Cell> getLivingCells()
+    {
+        return livingCells;
     }
 }
