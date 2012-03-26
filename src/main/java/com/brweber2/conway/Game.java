@@ -3,9 +3,9 @@
  */
 package com.brweber2.conway;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +16,7 @@ public class Game
     private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
     private Boundaries lastBoundaries = null;
 
-    public Game( List<Coordinate> currentLivingCells )
+    public Game( Collection<Coordinate> currentLivingCells )
     {
         // initialize our game state
         for ( Coordinate currentLivingCell : currentLivingCells )
@@ -44,7 +44,7 @@ public class Game
     public void handle( Coordinate coordinate, Cell cell )
     {
         Map<Coordinate,Cell> neighboringCells = getNeighboringCells( coordinate );
-        Cell next = cell.getNextState( neighboringCells );
+        Cell next = cell.getNextCell( neighboringCells );
         if ( next.alive() )
         {
             nextRoundOfLivingCells.put( coordinate, next );

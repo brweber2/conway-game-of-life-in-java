@@ -25,7 +25,7 @@ public enum Cell
         return alive;
     }
 
-    public Cell getNextState( Map<Coordinate,Cell> neighbors )
+    public Cell getNextCell( Map<Coordinate, Cell> neighbors )
     {
         int numberOfLiveNeighbors = getLiveNeighbors( neighbors ).size();
         if ( alive() )

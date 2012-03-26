@@ -28,6 +28,7 @@ public class Boundaries
             }
             else if ( first )
             {
+                // don't assume min x and y are zero...
                 minX = x;
                 maxX = x;
                 minY = y;
