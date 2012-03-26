@@ -43,8 +43,8 @@ public class Game
 
     public void handle( Coordinate coordinate, CellState cell )
     {
-        Map<CellState, Coordinate> neighboringCells = getNeighboringCells( coordinate );
-        CellState nextState = cell.getNextState( neighboringCells.keySet() );
+        Map<Coordinate,CellState> neighboringCells = getNeighboringCells( coordinate );
+        CellState nextState = cell.getNextState( neighboringCells );
         if ( nextState.alive() )
         {
             nextRoundOfLivingCells.put( coordinate, nextState );
@@ -52,9 +52,9 @@ public class Game
         if ( cell.alive() )
         {
             // we have have to raise some of our dead neighbor cells...
-            for ( CellState neighboringCell : getDeadNeighbors( neighboringCells.keySet() ) )
+            for ( Coordinate neighborCoordinate : getDeadNeighbors( neighboringCells ) )
             {
-                Coordinate neighborCoordinate = neighboringCells.get( neighboringCell );
+                CellState neighboringCell = neighboringCells.get( neighborCoordinate );
                 if ( !visitedNeighborCoordinates.contains( neighborCoordinate ) )
                 {
                     visitedNeighborCoordinates.add( neighborCoordinate );
@@ -64,12 +64,12 @@ public class Game
         }
     }
 
-    private Map<CellState, Coordinate> getNeighboringCells( Coordinate coordinate )
+    private Map<Coordinate,CellState> getNeighboringCells( Coordinate coordinate )
     {
         int x = coordinate.getX();
         int y = coordinate.getY();
 
-        Map<CellState,Coordinate> result = new HashMap<CellState, Coordinate>();
+        Map<Coordinate,CellState> result = new HashMap<Coordinate,CellState>();
         addToResult( result, new Coordinate( x - 1, y - 1 ) );
         addToResult( result, new Coordinate( x - 1, y     ) );
         addToResult( result, new Coordinate( x - 1, y + 1 ) );
@@ -82,26 +82,27 @@ public class Game
         return result;
     }
 
-    private void addToResult( Map<CellState,Coordinate> result, Coordinate next )
+    private void addToResult( Map<Coordinate,CellState> result, Coordinate next )
     {
         if ( currentLivingCells.containsKey( next ) )
         {
-            result.put( currentLivingCells.get( next ), next );
+            result.put( next, currentLivingCells.get( next ) );
         }
         else
         {
-            result.put( CellState.DEAD, next );
+            result.put( next, CellState.DEAD );
         }
     }
     
-    private Set<CellState> getDeadNeighbors( Set<CellState> neighbors )
+    private Set<Coordinate> getDeadNeighbors( Map<Coordinate,CellState> neighbors )
     {
-        Set<CellState> list = new HashSet<CellState>();
-        for ( CellState neighbor : neighbors )
+        Set<Coordinate> list = new HashSet<Coordinate>();
+        for ( Coordinate coordinate : neighbors.keySet() )
         {
+            CellState neighbor = neighbors.get( coordinate );
             if ( ! neighbor.alive() )
             {
-                list.add( neighbor );
+                list.add( coordinate );
             }
         }
         return list;

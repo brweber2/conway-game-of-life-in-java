@@ -4,6 +4,7 @@
 package com.brweber2.conway;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public enum CellState
@@ -24,7 +25,7 @@ public enum CellState
         return alive;
     }
 
-    public CellState getNextState( Set<CellState> neighbors )
+    public CellState getNextState( Map<Coordinate,CellState> neighbors )
     {
         int numberOfLiveNeighbors = getLiveNeighbors( neighbors ).size();
         if ( alive() )
@@ -53,14 +54,15 @@ public enum CellState
         }
     }
 
-    public Set<CellState> getLiveNeighbors( Set<CellState> neighbors )
+    public Set<Coordinate> getLiveNeighbors( Map<Coordinate,CellState> neighbors )
     {
-        Set<CellState> list = new HashSet<CellState>();
-        for ( CellState neighbor : neighbors )
+        Set<Coordinate> list = new HashSet<Coordinate>();
+        for ( Coordinate coordinate : neighbors.keySet() )
         {
+            CellState neighbor = neighbors.get( coordinate );
             if ( neighbor.alive() )
             {
-                list.add( neighbor );
+                list.add( coordinate );
             }
         }
         return list;
