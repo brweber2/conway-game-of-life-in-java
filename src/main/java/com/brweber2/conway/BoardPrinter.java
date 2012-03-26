@@ -14,10 +14,10 @@ public class BoardPrinter
 
     public void print()
     {
-        Boundaries boundaries = board.getBoundaries();
-        for ( int y = boundaries.getMinY(); y <= boundaries.getMaxY(); y++ )
+        BoardBoundaries boardBoundaries = board.getBoundaries();
+        for ( int y = boardBoundaries.getMinY(); y <= boardBoundaries.getMaxY(); y++ )
         {
-            for ( int x = boundaries.getMinX(); x <= boundaries.getMaxX(); x++ )
+            for ( int x = boardBoundaries.getMinX(); x <= boardBoundaries.getMaxX(); x++ )
             {
                 if ( board.hasCoordinate( new Coordinate( x, y ) ) )
                 {

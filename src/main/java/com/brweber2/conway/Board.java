@@ -23,8 +23,9 @@ public class Board
         this.previousBoard = board;
     }
 
-    public Board( Map<Coordinate, Cell> livingCells )
+    public Board( Board board, Map<Coordinate, Cell> livingCells )
     {
+        this.previousBoard = board;
         this.livingCells = livingCells;
     }
 
@@ -53,15 +54,15 @@ public class Board
         livingCells.put( coordinate, cell );
     }
 
-    public Boundaries getBoundaries()
+    public BoardBoundaries getBoundaries()
     {
         if ( previousBoard != null )
         {
-            return new Boundaries( previousBoard.getBoundaries(), getCoordinates() );
+            return new BoardBoundaries( previousBoard.getBoundaries(), getCoordinates() );
         }
         else
         {
-            return new Boundaries( getCoordinates() );
+            return new BoardBoundaries( getCoordinates() );
         }
     }
 

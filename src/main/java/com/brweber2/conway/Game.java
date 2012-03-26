@@ -32,7 +32,7 @@ public class Game
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        previousBoard = new Board( nextBoard.getLivingCells() );
+        previousBoard = new Board( nextBoard, nextBoard.getLivingCells() );
         nextBoard = new Board( previousBoard );
         for ( Coordinate coordinate : previousBoard.getCoordinates() )
         {
