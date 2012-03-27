@@ -13,7 +13,6 @@ public class Game
 {
     private Board previousBoard = null;
     private Board nextBoard = new Board(previousBoard);
-    private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
 
     public Game( Collection<Coordinate> initialBoard )
     {
@@ -23,15 +22,9 @@ public class Game
             nextBoard.put( coordinate, Cell.ALIVE );
         }
     }
-    
-    public BoardPrinter getBoard()
-    {
-        return new BoardPrinter( nextBoard );
-    }
 
     public void advanceToNextRound()
     {
-        visitedNeighborCoordinates.clear();
         previousBoard = nextBoard;
         nextBoard = new Board(previousBoard);
         for ( Coordinate coordinate : previousBoard.keySet() )
@@ -54,9 +47,9 @@ public class Game
             for ( Coordinate neighborCoordinate : getDeadNeighbors( neighboringCells ) )
             {
                 Cell neighboringCell = neighboringCells.get( neighborCoordinate );
-                if ( !visitedNeighborCoordinates.contains( neighborCoordinate ) )
+                if ( !nextBoard.visited( neighborCoordinate ) )
                 {
-                    visitedNeighborCoordinates.add( neighborCoordinate );
+                    nextBoard.visit( neighborCoordinate );
                     handle( neighborCoordinate, neighboringCell );
                 }
             }
@@ -110,11 +103,11 @@ public class Game
 
     public boolean over()
     {
-        return nextBoard.isEmpty();
+        return nextBoard.isEmpty() || nextBoard.equals( previousBoard );
     }
 
     public void printBoard()
     {
-        getBoard().print();
+        new BoardPrinter( nextBoard ).print();
     }
 }
