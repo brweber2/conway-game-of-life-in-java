@@ -9,20 +9,20 @@ public class BoundingBox
 {
     int minX, maxX, minY, maxY;
 
-    public BoundingBox( BoundingBox lastBoundingBox, Collection<Coordinate> coordinates )
+    public BoundingBox( Board previousBoard, Board board )
     {
-        minX = lastBoundingBox.getMinX();
-        maxX = lastBoundingBox.getMaxX();
-        minY = lastBoundingBox.getMinY();
-        maxY = lastBoundingBox.getMaxY();
-        init( true, coordinates );
+        boolean seeded = false;
+        if ( previousBoard != null )
+        {
+            // we don't ever want to get smaller than the previous board so the size isn't jumping all over the place...
+            BoundingBox lastBoundingBox = previousBoard.getBoundingBox();
+            seed( lastBoundingBox.getMinX(), lastBoundingBox.getMinY() );
+            check( lastBoundingBox.getMaxX(), lastBoundingBox.getMaxY() );
+            seeded = true;
+        }
+        init( seeded, board.keySet() );
     }
 
-    public BoundingBox( Collection<Coordinate> coordinates )
-    {
-        init( false, coordinates );
-    }
-    
     private void init( boolean seeded, Collection<Coordinate> coordinates )
     {
         for ( Coordinate coordinate : coordinates )
@@ -32,17 +32,27 @@ public class BoundingBox
             if ( !seeded )
             {
                 // don't assume min x and y are zero...
-                minX = x;
-                maxX = x;
-                minY = y;
-                maxY = y;
+                seed( x, y );
                 seeded = true;
             }
-            if ( x < minX ) { minX = x; }
-            if ( x > maxX ) { maxX = x; }
-            if ( y < minY ) { minY = y; }
-            if ( y > maxY ) { maxY = y; }
+            check( x, y );
         }
+    }
+
+    private void seed( int x, int y )
+    {
+        minX = x;
+        maxX = x;
+        minY = y;
+        maxY = y;
+    }
+
+    private void check( int x, int y )
+    {
+        if ( x < minX ) { minX = x; }
+        if ( x > maxX ) { maxX = x; }
+        if ( y < minY ) { minY = y; }
+        if ( y > maxY ) { maxY = y; }
     }
 
     public int getMinX()

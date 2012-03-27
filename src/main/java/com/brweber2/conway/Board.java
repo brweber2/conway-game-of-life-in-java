@@ -33,13 +33,6 @@ public class Board extends AbstractMap<Coordinate,Cell>
 
     public BoundingBox getBoundingBox()
     {
-        if ( previousBoard != null )
-        {
-            return new BoundingBox( previousBoard.getBoundingBox(), keySet() );
-        }
-        else
-        {
-            return new BoundingBox( keySet() );
-        }
+        return new BoundingBox( previousBoard, this );
     }
 }
