@@ -17,7 +17,6 @@ public class CellTransition
         int numberOfLiveNeighbors = neighbors.getLiveNeighbors().size();
         if ( cell.alive() )
         {
-
             if ( numberOfLiveNeighbors < 2 )
             {
                 return Cell.DEAD;
