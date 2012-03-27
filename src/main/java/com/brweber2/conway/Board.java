@@ -11,23 +11,12 @@ import java.util.Set;
 public class Board extends AbstractMap<Coordinate,Cell>
 {
     private Map<Coordinate, Cell> livingCells;
-    private Board previousBoard = null;
+    private Board previousBoard;
 
-    public Board()
+    public Board( Board previousBoard )
     {
-        this.livingCells = new HashMap<Coordinate, Cell>();
-    }
-
-    public Board( Board board )
-    {
-        this();
-        this.previousBoard = board;
-    }
-
-    public Board( Board board, Map<Coordinate, Cell> livingCells )
-    {
-        this.previousBoard = board;
-        this.livingCells = livingCells;
+        this.previousBoard = previousBoard;
+        livingCells = new HashMap<Coordinate, Cell>();
     }
 
     @Override

@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class Game
 {
-    private Board previousBoard;
-    private Board nextBoard = new Board();
+    private Board previousBoard = null;
+    private Board nextBoard = new Board(previousBoard);
     private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
 
     public Game( Collection<Coordinate> initialBoard )
@@ -32,8 +32,8 @@ public class Game
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        previousBoard = new Board( nextBoard, nextBoard );
-        nextBoard = new Board( previousBoard );
+        previousBoard = nextBoard;
+        nextBoard = new Board(previousBoard);
         for ( Coordinate coordinate : previousBoard.keySet() )
         {
             handle( coordinate, previousBoard.get( coordinate ) );
