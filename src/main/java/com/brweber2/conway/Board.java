@@ -5,7 +5,6 @@ package com.brweber2.conway;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,12 +12,13 @@ public class Board extends AbstractMap<Coordinate,Cell>
 {
     private Board previousBoard;
     private Map<Coordinate, Cell> livingCells;
-    private Set<Coordinate> visitedNeighborCoordinates = new HashSet<Coordinate>();
+    private VisitedCells visitedCells;
 
     public Board( Board previousBoard )
     {
         this.previousBoard = previousBoard;
         livingCells = new HashMap<Coordinate, Cell>();
+        this.visitedCells = new VisitedCells( previousBoard, this );
     }
 
     @Override
@@ -36,6 +36,11 @@ public class Board extends AbstractMap<Coordinate,Cell>
     public BoundingBox getBoundingBox()
     {
         return new BoundingBox( previousBoard, this );
+    }
+
+    public VisitedCells getVisitedCells()
+    {
+        return visitedCells;
     }
 
     @Override
@@ -70,15 +75,5 @@ public class Board extends AbstractMap<Coordinate,Cell>
         int result = super.hashCode();
         result = 31 * result + ( livingCells != null ? livingCells.hashCode() : 0 );
         return result;
-    }
-
-    public boolean visited( Coordinate neighborCoordinate )
-    {
-        return visitedNeighborCoordinates.contains( neighborCoordinate );
-    }
-
-    public void visit( Coordinate neighborCoordinate )
-    {
-        visitedNeighborCoordinates.add( neighborCoordinate );
     }
 }
