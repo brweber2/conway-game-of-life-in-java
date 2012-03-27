@@ -17,7 +17,7 @@ public class Board extends AbstractMap<Coordinate,Cell>
     public Board( Board previousBoard )
     {
         this.previousBoard = previousBoard;
-        livingCells = new HashMap<Coordinate, Cell>();
+        this.livingCells = new HashMap<Coordinate, Cell>();
         this.visitedCells = new VisitedCells( previousBoard, this );
     }
 

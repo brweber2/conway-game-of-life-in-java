@@ -3,10 +3,6 @@
  */
 package com.brweber2.conway;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class CellTransition
 {
     private final Cell cell;
@@ -16,9 +12,9 @@ public class CellTransition
         this.cell = cell;
     }
 
-    public Cell getNextCell( Map<Coordinate, Cell> neighbors )
+    public Cell getNextCell( NeighboringCells neighbors )
     {
-        int numberOfLiveNeighbors = getLiveNeighbors( neighbors ).size();
+        int numberOfLiveNeighbors = neighbors.getLiveNeighbors().size();
         if ( cell.alive() )
         {
 
@@ -43,19 +39,5 @@ public class CellTransition
             }
             return Cell.DEAD;
         }
-    }
-
-    private Set<Coordinate> getLiveNeighbors( Map<Coordinate,Cell> neighbors )
-    {
-        Set<Coordinate> list = new HashSet<Coordinate>();
-        for ( Coordinate coordinate : neighbors.keySet() )
-        {
-            Cell neighbor = neighbors.get( coordinate );
-            if ( neighbor.alive() )
-            {
-                list.add( coordinate );
-            }
-        }
-        return list;
     }
 }

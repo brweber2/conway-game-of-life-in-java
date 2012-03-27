@@ -21,7 +21,7 @@ public class VisitedCells
     public void checkCell( Coordinate coordinate, Cell cell )
     {
         NeighboringCells neighbors = new NeighboringCells( previousBoard, coordinate );
-        Cell nextCell = new CellTransition( cell ).getNextCell( neighbors.getLiveNeighbors() );
+        Cell nextCell = new CellTransition( cell ).getNextCell( neighbors );
         if ( nextCell.alive() )
         {
             nextBoard.put( coordinate, nextCell );
