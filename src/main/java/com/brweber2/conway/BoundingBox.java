@@ -5,21 +5,20 @@ package com.brweber2.conway;
 
 import java.util.Collection;
 
-public class BoardBoundaries
+public class BoundingBox
 {
     int minX, maxX, minY, maxY;
-    int offset = 2;
 
-    public BoardBoundaries( BoardBoundaries lastBoardBoundaries, Collection<Coordinate> coordinates )
+    public BoundingBox( BoundingBox lastBoundingBox, Collection<Coordinate> coordinates )
     {
-        minX = lastBoardBoundaries.getMinX();
-        maxX = lastBoardBoundaries.getMaxX();
-        minY = lastBoardBoundaries.getMinY();
-        maxY = lastBoardBoundaries.getMaxY();
+        minX = lastBoundingBox.getMinX();
+        maxX = lastBoundingBox.getMaxX();
+        minY = lastBoundingBox.getMinY();
+        maxY = lastBoundingBox.getMaxY();
         init( true, coordinates );
     }
 
-    public BoardBoundaries( Collection<Coordinate> coordinates )
+    public BoundingBox( Collection<Coordinate> coordinates )
     {
         init( false, coordinates );
     }
@@ -33,16 +32,16 @@ public class BoardBoundaries
             if ( !seeded )
             {
                 // don't assume min x and y are zero...
-                minX = x - offset;
-                maxX = x + offset;
-                minY = y - offset;
-                maxY = y + offset;
+                minX = x;
+                maxX = x;
+                minY = y;
+                maxY = y;
                 seeded = true;
             }
-            if ( x < minX ) { minX = x - offset; }
-            if ( x > maxX ) { maxX = x + offset; }
-            if ( y < minY ) { minY = y - offset; }
-            if ( y > maxY ) { maxY = y + offset; }
+            if ( x < minX ) { minX = x; }
+            if ( x > maxX ) { maxX = x; }
+            if ( y < minY ) { minY = y; }
+            if ( y > maxY ) { maxY = y; }
         }
     }
 
@@ -69,7 +68,7 @@ public class BoardBoundaries
     @Override
     public String toString()
     {
-        return "BoardBoundaries{" +
+        return "BoundingBox{" +
                 "minX=" + minX +
                 ", maxX=" + maxX +
                 ", minY=" + minY +

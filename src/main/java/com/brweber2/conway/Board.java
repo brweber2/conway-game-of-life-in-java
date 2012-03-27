@@ -3,11 +3,12 @@
  */
 package com.brweber2.conway;
 
-import java.util.Collection;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class Board
+public class Board extends AbstractMap<Coordinate,Cell>
 {
     private Map<Coordinate, Cell> livingCells;
     private Board previousBoard = null;
@@ -29,45 +30,27 @@ public class Board
         this.livingCells = livingCells;
     }
 
-    public boolean hasCoordinate( Coordinate coordinate )
+    @Override
+    public Cell put( Coordinate coordinate, Cell cell )
     {
-        return livingCells.containsKey( coordinate );
+        return livingCells.put(coordinate,cell);
     }
 
-    public Collection<Coordinate> getCoordinates()
+    @Override
+    public Set<Entry<Coordinate, Cell>> entrySet()
     {
-        return livingCells.keySet();
+        return livingCells.entrySet();
     }
 
-    public Cell get( Coordinate coordinate )
-    {
-        return livingCells.get( coordinate );
-    }
-
-    public boolean isEmpty()
-    {
-        return livingCells.isEmpty();
-    }
-
-    public void put( Coordinate coordinate, Cell cell )
-    {
-        livingCells.put( coordinate, cell );
-    }
-
-    public BoardBoundaries getBoundaries()
+    public BoundingBox getBoundingBox()
     {
         if ( previousBoard != null )
         {
-            return new BoardBoundaries( previousBoard.getBoundaries(), getCoordinates() );
+            return new BoundingBox( previousBoard.getBoundingBox(), keySet() );
         }
         else
         {
-            return new BoardBoundaries( getCoordinates() );
+            return new BoundingBox( keySet() );
         }
-    }
-
-    public Map<Coordinate, Cell> getLivingCells()
-    {
-        return livingCells;
     }
 }

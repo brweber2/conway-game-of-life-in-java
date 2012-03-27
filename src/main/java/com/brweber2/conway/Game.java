@@ -32,9 +32,9 @@ public class Game
     public void advanceToNextRound()
     {
         visitedNeighborCoordinates.clear();
-        previousBoard = new Board( nextBoard, nextBoard.getLivingCells() );
+        previousBoard = new Board( nextBoard, nextBoard );
         nextBoard = new Board( previousBoard );
-        for ( Coordinate coordinate : previousBoard.getCoordinates() )
+        for ( Coordinate coordinate : previousBoard.keySet() )
         {
             handle( coordinate, previousBoard.get( coordinate ) );
         }
@@ -83,7 +83,7 @@ public class Game
 
     private void addToResult( Map<Coordinate,Cell> result, Coordinate next )
     {
-        if ( previousBoard.hasCoordinate( next ) )
+        if ( previousBoard.containsKey( next ) )
         {
             result.put( next, previousBoard.get( next ) );
         }

@@ -14,12 +14,13 @@ public class BoardPrinter
 
     public void print()
     {
-        BoardBoundaries boardBoundaries = board.getBoundaries();
-        for ( int y = boardBoundaries.getMinY(); y <= boardBoundaries.getMaxY(); y++ )
+        int offset = 2;
+        BoundingBox boundingBox = board.getBoundingBox();
+        for ( int y = boundingBox.getMinY() - offset; y <= boundingBox.getMaxY() + offset; y++ )
         {
-            for ( int x = boardBoundaries.getMinX(); x <= boardBoundaries.getMaxX(); x++ )
+            for ( int x = boundingBox.getMinX() - offset; x <= boundingBox.getMaxX() + offset; x++ )
             {
-                if ( board.hasCoordinate( new Coordinate( x, y ) ) )
+                if ( board.containsKey( new Coordinate( x, y ) ) )
                 {
                     System.err.print( "*" );
                 }
