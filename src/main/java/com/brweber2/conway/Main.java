@@ -11,7 +11,7 @@ import java.util.Set;
 public class Main
 {
 
-    public static int WIDTH = 35;
+    public static int WIDTH = 75;
     public static int HEIGHT = 20;
     public static int COORDS = 345;
     public static Random random = new Random();
