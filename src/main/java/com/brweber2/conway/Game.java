@@ -31,14 +31,9 @@ public class Game
 
     public void handle( Coordinate coordinate, Cell cell )
     {
-        NeighboringCells neighbors = new NeighboringCells( previousBoard, coordinate );
-        Cell nextCell = new CellTransition( cell ).getNextCell( neighbors.getLiveNeighbors() );
-        if ( nextCell.alive() )
-        {
-            nextBoard.put( coordinate, nextCell );
-        }
+        nextBoard.getVisitedCells().checkCell( coordinate, cell );
         // we have have to raise some of our dead neighbor cells...
-        nextBoard.getVisitedCells().checkDeadNeighbors( neighbors );
+        nextBoard.getVisitedCells().checkDeadNeighbors( coordinate );
     }
 
     public boolean over()

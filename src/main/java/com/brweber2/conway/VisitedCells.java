@@ -17,20 +17,26 @@ public class VisitedCells
         this.previousBoard = previousBoard;
         this.nextBoard = nextBoard;
     }
-
-    public void checkDeadNeighbors( NeighboringCells neighboringCells )
+    
+    public void checkCell( Coordinate coordinate, Cell cell )
     {
+        NeighboringCells neighbors = new NeighboringCells( previousBoard, coordinate );
+        Cell nextCell = new CellTransition( cell ).getNextCell( neighbors.getLiveNeighbors() );
+        if ( nextCell.alive() )
+        {
+            nextBoard.put( coordinate, nextCell );
+        }
+    }
+
+    public void checkDeadNeighbors( Coordinate coordinate )
+    {
+        NeighboringCells neighboringCells = new NeighboringCells( previousBoard, coordinate );
         for ( Coordinate deadNeighborCoordinate : neighboringCells.getDeadNeighbors().keySet() )
         {
             if ( !visitedNeighborCoordinates.contains( deadNeighborCoordinate ) )
             {
-                Cell neighboringCell = neighboringCells.getDeadNeighbors().get( deadNeighborCoordinate );
-                NeighboringCells deadCellNeighbors = new NeighboringCells( previousBoard, deadNeighborCoordinate );
-                Cell nextCell = new CellTransition( neighboringCell ).getNextCell( deadCellNeighbors.getLiveNeighbors() );
-                if ( nextCell.alive() )
-                {
-                    nextBoard.put( deadNeighborCoordinate, nextCell );
-                }
+                Cell deadNeighboringCell = neighboringCells.getDeadNeighbors().get( deadNeighborCoordinate );
+                checkCell( deadNeighborCoordinate, deadNeighboringCell );
                 visitedNeighborCoordinates.add( deadNeighborCoordinate );
             }
         }
