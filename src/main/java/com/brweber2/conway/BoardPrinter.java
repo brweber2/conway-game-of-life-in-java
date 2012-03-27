@@ -14,11 +14,11 @@ public class BoardPrinter
 
     public void print()
     {
-        int offset = 2;
+        int padding = 2;
         BoundingBox boundingBox = board.getBoundingBox();
-        for ( int y = boundingBox.getMinY() - offset; y <= boundingBox.getMaxY() + offset; y++ )
+        for ( int y = boundingBox.getMinY() - padding; y <= boundingBox.getMaxY() + padding; y++ )
         {
-            for ( int x = boundingBox.getMinX() - offset; x <= boundingBox.getMaxX() + offset; x++ )
+            for ( int x = boundingBox.getMinX() - padding; x <= boundingBox.getMaxX() + padding; x++ )
             {
                 if ( board.containsKey( new Coordinate( x, y ) ) )
                 {
