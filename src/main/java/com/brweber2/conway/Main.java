@@ -23,7 +23,7 @@ public class Main
         {
             game.printBoard();
             game.advanceToNextRound();
-            Thread.sleep( 500 );
+            Thread.sleep( 250 );
         }
         while ( ! game.over() );
     }
