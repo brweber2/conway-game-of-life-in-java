@@ -17,7 +17,9 @@ public class BoardPrinter
     private void clearOldBoard()
     {
         // stealing *nix trick from Ed :)
-        System.err.print(ESC + "2J"); System.err.flush();
+        System.err.print(ESC + "2J");
+        System.err.print(ESC + "H");  // reset to 0,0 so we force the screen to always grow down, but this solves the flickering problem when growing downwards
+        System.err.flush();
     }
 
     public void print()
