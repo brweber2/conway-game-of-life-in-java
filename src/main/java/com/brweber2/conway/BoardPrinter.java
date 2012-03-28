@@ -5,6 +5,8 @@ package com.brweber2.conway;
 
 public class BoardPrinter
 {
+    final static String ESC = "\033[";
+
     private final Board board;
 
     public BoardPrinter( Board board )
@@ -12,8 +14,15 @@ public class BoardPrinter
         this.board = board;
     }
 
+    private void clearOldBoard()
+    {
+        // stealing *nix trick from Ed :)
+        System.out.print(ESC + "2J"); System.out.flush();
+    }
+
     public void print()
     {
+        clearOldBoard();
         int padding = 2;
         BoundingBox boundingBox = board.getBoundingBox();
         for ( int y = boundingBox.getMinY() - padding; y <= boundingBox.getMaxY() + padding; y++ )
