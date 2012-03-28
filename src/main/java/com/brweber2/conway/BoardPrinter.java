@@ -17,7 +17,7 @@ public class BoardPrinter
     private void clearOldBoard()
     {
         // stealing *nix trick from Ed :)
-        System.out.print(ESC + "2J"); System.out.flush();
+        System.err.print(ESC + "2J"); System.err.flush();
     }
 
     public void print()
