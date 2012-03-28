@@ -33,9 +33,15 @@ public class BoardPrinter
                 {
                     System.err.print( "*" );
                 }
-                else
+                else if ( x == boundingBox.getMinX() - padding || x == boundingBox.getMaxX() + padding
+                        || y == boundingBox.getMinY() - padding || y == boundingBox.getMaxY() + padding
+                        )
                 {
                     System.err.print( "." );
+                }
+                else
+                {
+                    System.err.print( " " );
                 }
             }
             System.err.println();
